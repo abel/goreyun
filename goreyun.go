@@ -8,10 +8,12 @@ import (
 	"net/http"
 )
 
+//REST SDK URL
 //http://game.reyun.com/restdoc
 
 var (
-	host  = "http://log.reyun.com/receive/rest/"
+	host = "http://log.reyun.com/receive/rest/"
+	//需要改为自己申请的Appid
 	Appid = "34fa5a932c970b5cd2344b36addbb615"
 )
 
@@ -137,7 +139,7 @@ func (self *EconomyRest) Name() string {
 type QuestContext struct {
 	*UserContext
 	Questid     string `json:"questid"`     //当前任务/关卡/副本的编号或名称
-	Queststatus string `json:"queststatus"` //当前任务/关卡/副本的状态，有如下三种类型：开始：a完成：c失败：f
+	Queststatus string `json:"queststatus"` //当前任务/关卡/副本的状态，有如下三种类型：开始：a 完成：c 失败：f
 	Questtype   string `json:"questtype"`   //当前任务/关卡/副本的类型，例如： 新手任务：new 主线任务：main 支线任务：sub 开发者也可以根据自己游戏的特点自定义类型
 }
 

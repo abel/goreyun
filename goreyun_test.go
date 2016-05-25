@@ -27,10 +27,10 @@ func TestTimeParsse(t *testing.T) {
 
 const (
 	Success     = "{\"status\":0}"
-	NameHead    = "test00"
-	DevicedHead = "adsfewrwe233434dsfa"
-	IPHead      = "192.168.188,1"
-	UserCount   = 10
+	NameHead    = "test01"
+	DevicedHead = "adsfewrwe233434dsfb"
+	IPHead      = "192.168.188,2"
+	UserCount   = 20
 )
 
 func createEquipContext(i int) *EquipContext {
@@ -46,6 +46,7 @@ func createEquipContext(i int) *EquipContext {
 func createUserContext(i int) *UserContext {
 	u := &UserContext{
 		Serverid: "1",
+		Level:    fmt.Sprint(i),
 	}
 	u.Deviceid = DevicedHead + fmt.Sprint(i)
 	u.Channelid = "qq"
@@ -126,144 +127,204 @@ func createPaymenttype() string {
 
 }
 
-//func TestInstall(t *testing.T) {
-//	var resp string
-//	for i := 0; i < UserCount; i++ {
-//		req := InstallRest{
-//			Appid:   Appid,
-//			Context: createEquipContext(i),
-//		}
-//		resp = PostLog(&req)
-//	}
-//	Convey("reyun test", t, func() {
-//		Convey("Install", func() {
-//			So(resp, ShouldEqual, Success)
-//		})
-//	})
-//}
+func TestInstall(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		req := InstallRest{
+			Appid:   Appid,
+			Context: createEquipContext(i),
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Install", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
 
-//func TestStartup(t *testing.T) {
-//	var resp string
-//	for i := 0; i < UserCount; i++ {
-//		context := StartupContext{
-//			EquipContext: createEquipContext(i),
-//			Tz:           "+8",
-//			Devicetype:   createDevicetype(),
-//			Op:           createOP(),
-//			Network:      createNetwork(),
-//			Os:           createOS(),
-//			Resolution:   createResolution(),
-//		}
-//		req := StartupRest{
-//			Appid:   Appid,
-//			Context: context,
-//		}
-//		resp = PostLog(&req)
-//	}
-//	Convey("reyun test", t, func() {
-//		Convey("Startup", func() {
-//			So(resp, ShouldEqual, Success)
-//		})
-//	})
-//}
+func TestStartup(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		context := StartupContext{
+			EquipContext: createEquipContext(i),
+			Tz:           "+8",
+			Devicetype:   createDevicetype(),
+			Op:           createOP(),
+			Network:      createNetwork(),
+			Os:           createOS(),
+			Resolution:   createResolution(),
+		}
+		req := StartupRest{
+			Appid:   Appid,
+			Context: context,
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Startup", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
 
-//func TestRegister(t *testing.T) {
-//	var resp string
-//	//男：m女：f
-//	gender := []string{"m", "f"}
-//	for i := 0; i < UserCount; i++ {
-//		context := RegisterContext{
-//			EquipContext: createEquipContext(i),
-//			Accounttype:  "test",
-//			Gender:       gender[i%2],
-//			Age:          fmt.Sprint(18 + i),
-//			Serverid:     "1",
-//		}
-//		req := RegisterRest{
-//			Appid:   Appid,
-//			Who:     NameHead + fmt.Sprint(i),
-//			Context: context,
-//		}
-//		resp = PostLog(&req)
-//	}
-//	Convey("reyun test", t, func() {
-//		Convey("Register", func() {
-//			So(resp, ShouldEqual, Success)
-//		})
-//	})
-//}
+func TestRegister(t *testing.T) {
+	var resp string
+	//男：m女：f
+	gender := []string{"m", "f"}
+	for i := 0; i < UserCount; i++ {
+		context := RegisterContext{
+			EquipContext: createEquipContext(i),
+			Accounttype:  "test",
+			Gender:       gender[i%2],
+			Age:          fmt.Sprint(18 + i),
+			Serverid:     "1",
+		}
+		req := RegisterRest{
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+			Context: context,
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Register", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
 
-//func TestLoggedin(t *testing.T) {
-//	var resp string
-//	for i := 0; i < UserCount; i++ {
-//		context := LoggedinContext{
-//			UserContext: createUserContext(i),
-//		}
-//		req := LoggedinRest{
-//			Appid:   Appid,
-//			Who:     NameHead + fmt.Sprint(i),
-//			Context: context,
-//		}
-//		resp = PostLog(&req)
-//	}
-//	Convey("reyun test", t, func() {
-//		Convey("Loggedin", func() {
-//			So(resp, ShouldEqual, Success)
-//		})
-//	})
-//}
+func TestLoggedin(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		req := LoggedinRest{
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+			Context: createUserContext(i),
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Loggedin", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
 
-//func createTransactionid(i int) string {
-//	t := time.Now().UnixNano()
-//	return fmt.Sprint(t) + fmt.Sprint(i)
-//}
+func createTransactionid(i int) string {
+	t := time.Now().UnixNano()
+	return fmt.Sprint(t) + fmt.Sprint(i)
+}
 
-//func TestPayment(t *testing.T) {
-//	var resp string
-//	for i := 0; i < UserCount; i++ {
-//		context := PaymentContext{
-//			UserContext:       createUserContext(i),
-//			Transactionid:     createTransactionid(i),     //交易的流水号
-//			Paymenttype:       createPaymenttype(),        //支付类型，例如支付宝，银联，苹果、谷歌官方等,如果是系统赠送的，paymentType为：free
-//			Currencytype:      "CNY",                      //货币类型，按照国际标准组织ISO 4217中规范的3位字母，例如CNY人民币、USD美金等
-//			Currencyamount:    fmt.Sprint(10 * (i + 1)),   //支付的真实货币的金额
-//			Virtualcoinamount: fmt.Sprint(1000 * (i + 1)), //通过充值获得的游戏内货币的数量
-//			Iapname:           "Vip" + fmt.Sprint(i),      //游戏内购买道具的名称
-//			Iapamount:         "1",                        //游戏内购买道具的数量
-//		}
-//		req := PaymentRest{
-//			Appid:   Appid,
-//			Who:     NameHead + fmt.Sprint(i),
-//			Context: context,
-//		}
-//		resp = PostLog(&req)
-//	}
-//	Convey("reyun test", t, func() {
-//		Convey("Payment", func() {
-//			So(resp, ShouldEqual, Success)
-//		})
-//	})
-//}
+func TestPayment(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		context := PaymentContext{
+			UserContext:       createUserContext(i),
+			Transactionid:     createTransactionid(i),     //交易的流水号
+			Paymenttype:       createPaymenttype(),        //支付类型，例如支付宝，银联，苹果、谷歌官方等,如果是系统赠送的，paymentType为：free
+			Currencytype:      "CNY",                      //货币类型，按照国际标准组织ISO 4217中规范的3位字母，例如CNY人民币、USD美金等
+			Currencyamount:    fmt.Sprint(10 * (i + 1)),   //支付的真实货币的金额
+			Virtualcoinamount: fmt.Sprint(1000 * (i + 1)), //通过充值获得的游戏内货币的数量
+			Iapname:           "Vip" + fmt.Sprint(i),      //游戏内购买道具的名称
+			Iapamount:         "1",                        //游戏内购买道具的数量
+		}
+		req := PaymentRest{
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+			Context: context,
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Payment", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
 
-//func TestEconomy(t *testing.T) {
-//	var resp string
-//	for i := 0; i < UserCount; i++ {
-//		context := EconomyContext{
-//			UserContext:    createUserContext(i),
-//			Itemname:       "超级武器" + fmt.Sprint(i),             //游戏内虚拟物品的名称/ID
-//			Itemamount:     fmt.Sprint(10 * (i + 1)),           //交易的数量
-//			Itemtotalprice: fmt.Sprint(10 * (i + 1) * (i * 5)), //交易的总价
-//		}
-//		req := EconomyRest{
-//			Appid:   Appid,
-//			Who:     NameHead + fmt.Sprint(i),
-//			Context: context,
-//		}
-//		resp = PostLog(&req)
-//	}
-//	Convey("reyun test", t, func() {
-//		Convey("Economy", func() {
-//			So(resp, ShouldEqual, Success)
-//		})
-//	})
-//}
+func TestEconomy(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		context := EconomyContext{
+			UserContext:    createUserContext(i),
+			Itemname:       "超级武器" + fmt.Sprint(i),             //游戏内虚拟物品的名称/ID
+			Itemamount:     fmt.Sprint(10 * (i + 1)),           //交易的数量
+			Itemtotalprice: fmt.Sprint(10 * (i + 1) * (i * 5)), //交易的总价
+		}
+		req := EconomyRest{
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+			Context: context,
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Economy", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
+
+func TestQuest(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		context := QuestContext{
+			UserContext: createUserContext(i),
+			Questid:     "task_" + fmt.Sprint(i),
+			Queststatus: "a",
+			Questtype:   "new",
+		}
+		req := QuestRest{
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+			Context: context,
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Quest", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
+
+func TestEvent(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		context := EventContext{
+			UserContext:  createUserContext(i),
+			User_define1: "10025",
+			User_define2: fmt.Sprint(i),
+		}
+		req := EventRest{
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+			What:    "killmonster",
+			Context: context,
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Event", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
+
+func TestHeartbeat(t *testing.T) {
+	var resp string
+	for i := 0; i < UserCount; i++ {
+		req := HeartbeatRest{
+			Context: createUserContext(i),
+			Appid:   Appid,
+			Who:     NameHead + fmt.Sprint(i),
+		}
+		resp = PostLog(&req)
+	}
+	Convey("reyun test", t, func() {
+		Convey("Heartbeat", func() {
+			So(resp, ShouldEqual, Success)
+		})
+	})
+}
